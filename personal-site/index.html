@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhamad Rafli Pratama — Portfolio</title>
+<meta name="description" content="Portfolio mahasiswa Universitas Muhammadiyah Yogyakarta: proyek aplikasi mobile dan web.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,800&family=Libre+Franklin:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1EC; --ink:#17231E; --muted:#5B6A62; --line:#C9D1CA;
+  --accent:#2A3FD1; --mark:#F2C14E;
+  --display:"Archivo",system-ui,sans-serif;
+  --body:"Libre Franklin",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:400 1.05rem/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+
+/* nav */
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;font-family:var(--display);font-weight:500;font-size:.95rem}
+nav ul{display:flex;gap:1.5rem;list-style:none;padding:0}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--accent)}
+
+/* hero */
+.hero{padding:clamp(3rem,10vw,7rem) 0 clamp(3rem,8vw,5rem)}
+.hero h1{font:800 clamp(2.6rem,10vw,7.5rem)/.95 var(--display);font-stretch:125%;letter-spacing:-.03em;text-transform:uppercase}
+h2,.projects h3,.contact .big{font-stretch:112%}
+.hero h1 span{display:block;overflow:hidden}
+.hero h1 span i{display:inline-block;font-style:normal;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.hero h1 span:nth-child(2) i{animation-delay:.12s}
+.hero h1 span:nth-child(3) i{animation-delay:.24s;color:var(--accent)}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+.hero p{max-width:34rem;margin-top:2rem;font-size:1.15rem;color:var(--muted)}
+.hero p b{font-weight:500;color:var(--ink);background:linear-gradient(transparent 60%,var(--mark) 60%)}
+.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;font-family:var(--display);font-weight:500}
+.btn{padding:.8rem 1.4rem;border:2px solid var(--ink);border-radius:999px;text-decoration:none;transition:background .15s,color .15s}
+.btn.main{background:var(--ink);color:var(--paper)}
+.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* sections */
+section{padding:clamp(3rem,7vw,5rem) 0;border-top:2px solid var(--ink)}
+h2{font:800 clamp(1.8rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:-.02em;margin-bottom:2rem}
+.about{display:grid;gap:2rem;grid-template-columns:1fr}
+@media(min-width:800px){.about{grid-template-columns:1fr 2fr;gap:4rem}}
+.about p+p{margin-top:1.1rem}
+.facts{font-family:var(--display);font-weight:500;font-size:.98rem;list-style:none;padding:0}
+.facts li{padding:.7rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem}
+.facts span{color:var(--muted);font-weight:500}
+
+/* projects */
+.projects{list-style:none;padding:0;border-top:1px solid var(--line)}
+.projects li{border-bottom:1px solid var(--line)}
+.projects a{display:grid;gap:.4rem 2rem;padding:1.5rem .5rem;text-decoration:none;grid-template-columns:1fr;transition:background .2s,padding .2s}
+@media(min-width:800px){.projects a{grid-template-columns:1.2fr 2fr auto;align-items:baseline}}
+.projects a:hover{background:#fff;padding-left:1.25rem}
+.projects h3{font:800 1.3rem/1.2 var(--display)}
+.projects p{color:var(--muted);font-size:.98rem;line-height:1.55}
+.tag{font-family:var(--display);font-weight:500;font-size:.85rem;color:var(--accent)}
+
+/* skills */
+.skills{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0}
+.skills li{font-family:var(--display);font-weight:500;font-size:.95rem;padding:.45rem 1rem;border:1.5px solid var(--ink);border-radius:999px}
+
+/* contact */
+.contact p{max-width:30rem;color:var(--muted);margin-bottom:1.5rem}
+.contact .big{font:800 clamp(1.6rem,5vw,3rem)/1.1 var(--display);letter-spacing:-.03em;word-break:break-all;text-decoration-color:var(--mark);text-decoration-thickness:5px;text-underline-offset:6px}
+.contact .big:hover{color:var(--accent)}
+.social{display:flex;gap:1.5rem;margin-top:2rem;font-family:var(--display);font-weight:500}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem;border-top:1px solid var(--line)}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero h1 span i{animation:none}
+  .projects a{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav aria-label="Navigasi utama">
+  <a href="#top"><strong>Rafli Pratama</strong></a>
+  <ul>
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#proyek">Proyek</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <h1 aria-label="Muhamad Rafli Pratama">
+    <span><i>Muhamad</i></span>
+    <span><i>Rafli</i></span>
+    <span><i>Pratama</i></span>
+  </h1>
+  <p>Mahasiswa Universitas Muhammadiyah Yogyakarta yang membangun <b>aplikasi mobile dan web</b>. Saya suka mengubah tugas kuliah menjadi produk yang benar-benar bisa dipakai.</p>
+  <div class="cta">
+    <a class="btn main" href="#proyek">Lihat proyek</a>
+    <a class="btn" href="mailto:kipxrap@gmail.com">Kirim email</a>
+  </div>
+</header>
+
+<main>
+<section id="tentang">
+  <h2>Tentang saya</h2>
+  <div class="about">
+    <ul class="facts">
+      <li><span>Kampus</span> UMY</li>
+      <li><span>Lokasi</span> Yogyakarta</li>
+      <li><span>Fokus</span> Jaringan &amp; Software Engineering</li>
+      <li><span>Status</span> Terbuka untuk magang</li>
+    </ul>
+    <div>
+      <p>Saya mahasiswa Universitas Muhammadiyah Yogyakarta yang gampang penasaran dengan hal baru, terutama di dunia jaringan dan software engineering. Buat saya dua bidang ini saling melengkapi. Aplikasi sebagus apa pun tidak berguna kalau jaringan di bawahnya tidak jalan, dan jaringan yang rapi baru terasa manfaatnya lewat aplikasi yang dipakai orang.</p>
+      <p>Selama kuliah saya sering berpindah topik, dari merancang jaringan antarkota di Cisco Packet Tracer sampai membuat aplikasi Android dengan Jetpack Compose. Sekarang saya sedang belajar membangun sesuatu yang rapi dari awal sampai benar-benar bisa dipakai. Saya terbuka untuk magang atau proyek bersama yang memberi ruang belajar sambil mengerjakan hal nyata.</p>
+    </div>
+  </div>
+</section>
+
+<section id="proyek">
+  <h2>Proyek</h2>
+  <ul class="projects">
+    <li><a href="https://github.com/username/proyek-1">
+      <h3>Aplikasi TaxOffice</h3>
+      <p>Aplikasi mobile administrasi perkantoran pajak dengan Kotlin dan Jetpack Compose.</p>
+      <span class="tag">Android</span>
+    </a></li>
+    <li><a href="https://github.com/username/proyek-2">
+      <h3>Chatbot untuk UMKM</h3>
+      <p>Chatbot website berbasis sales funnel yang membantu pelaku UMKM menjawab pelanggan.</p>
+      <span class="tag">Web · AI</span>
+    </a></li>
+    <li><a href="https://github.com/username/proyek-3">
+      <h3>LaporFasilitas</h3>
+      <p>Sistem pelaporan fasilitas kampus, dari rancangan UI/UX sampai prototype.</p>
+      <span class="tag">UI/UX</span>
+    </a></li>
+    <li><a href="https://github.com/username/proyek-4">
+      <h3>Jaringan WAN Yogyakarta–Semarang</h3>
+      <p>Simulasi jaringan dua kota dengan konfigurasi router dan CDP di Cisco Packet Tracer.</p>
+      <span class="tag">Jaringan</span>
+    </a></li>
+  </ul>
+</section>
+
+<section id="keahlian">
+  <h2>Keahlian</h2>
+  <ul class="skills">
+    <li>Kotlin</li><li>Jetpack Compose</li><li>HTML &amp; CSS</li><li>JavaScript</li>
+    <li>Git &amp; GitHub</li><li>Figma</li><li>Cisco Packet Tracer</li>
+  </ul>
+</section>
+
+<section class="contact" id="kontak">
+  <h2>Mari ngobrol</h2>
+  <p>Punya proyek, lowongan magang, atau sekadar ingin berdiskusi? Kirim pesan, saya biasanya membalas dalam sehari.</p>
+  <a class="big" href="mailto:kipxrap@gmail.com">kipxrap@gmail.com</a>
+  <div class="social">
+    <a href="https://github.com/username">GitHub</a>
+    <a href="https://linkedin.com/in/username">LinkedIn</a>
+    <a href="https://instagram.com/username">Instagram</a>
+  </div>
+</section>
+</main>
+
+<footer>© <span id="y">2026</span> Muhamad Rafli Pratama. Dibuat di Yogyakarta.</footer>
+</div>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
