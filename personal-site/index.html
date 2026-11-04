@@ -1,97 +1,35 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Muhamad Rafli Pratama — Portfolio</title>
-<meta name="description" content="Portfolio mahasiswa Universitas Muhammadiyah Yogyakarta: proyek aplikasi mobile dan web.">
+<meta name="description" content="Portfolio of a Universitas Muhammadiyah Yogyakarta student: mobile and web application projects.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500;62..125,800&family=Libre+Franklin:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --paper:#EEF1EC; --ink:#17231E; --muted:#5B6A62; --line:#C9D1CA;
-  --accent:#2A3FD1; --mark:#F2C14E;
-  --display:"Archivo",system-ui,sans-serif;
-  --body:"Libre Franklin",system-ui,sans-serif;
-}
-*{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font:400 1.05rem/1.7 var(--body);-webkit-font-smoothing:antialiased}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
-
-/* nav */
-nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;font-family:var(--display);font-weight:500;font-size:.95rem}
-nav ul{display:flex;gap:1.5rem;list-style:none;padding:0}
-nav a{text-decoration:none}
-nav a:hover{text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--accent)}
-
-/* hero */
-.hero{padding:clamp(3rem,10vw,7rem) 0 clamp(3rem,8vw,5rem)}
-.hero h1{font:800 clamp(2.6rem,10vw,7.5rem)/.95 var(--display);font-stretch:125%;letter-spacing:-.03em;text-transform:uppercase}
-h2,.projects h3,.contact .big{font-stretch:112%}
-.hero h1 span{display:block;overflow:hidden}
-.hero h1 span i{display:inline-block;font-style:normal;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
-.hero h1 span:nth-child(2) i{animation-delay:.12s}
-.hero h1 span:nth-child(3) i{animation-delay:.24s;color:var(--accent)}
-@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
-.hero p{max-width:34rem;margin-top:2rem;font-size:1.15rem;color:var(--muted)}
-.hero p b{font-weight:500;color:var(--ink);background:linear-gradient(transparent 60%,var(--mark) 60%)}
-.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;font-family:var(--display);font-weight:500}
-.btn{padding:.8rem 1.4rem;border:2px solid var(--ink);border-radius:999px;text-decoration:none;transition:background .15s,color .15s}
-.btn.main{background:var(--ink);color:var(--paper)}
-.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-
-/* sections */
-section{padding:clamp(3rem,7vw,5rem) 0;border-top:2px solid var(--ink)}
-h2{font:800 clamp(1.8rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:-.02em;margin-bottom:2rem}
-.about{display:grid;gap:2rem;grid-template-columns:1fr}
-@media(min-width:800px){.about{grid-template-columns:1fr 2fr;gap:4rem}}
-.about p+p{margin-top:1.1rem}
-.facts{font-family:var(--display);font-weight:500;font-size:.98rem;list-style:none;padding:0}
-.facts li{padding:.7rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem}
-.facts span{color:var(--muted);font-weight:500}
-
-/* projects */
-.projects{list-style:none;padding:0;border-top:1px solid var(--line)}
-.projects li{border-bottom:1px solid var(--line)}
-.projects a{display:grid;gap:.4rem 2rem;padding:1.5rem .5rem;text-decoration:none;grid-template-columns:1fr;transition:background .2s,padding .2s}
-@media(min-width:800px){.projects a{grid-template-columns:1.2fr 2fr auto;align-items:baseline}}
-.projects a:hover{background:#fff;padding-left:1.25rem}
-.projects h3{font:800 1.3rem/1.2 var(--display)}
-.projects p{color:var(--muted);font-size:.98rem;line-height:1.55}
-.tag{font-family:var(--display);font-weight:500;font-size:.85rem;color:var(--accent)}
-
-/* skills */
-.skills{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0}
-.skills li{font-family:var(--display);font-weight:500;font-size:.95rem;padding:.45rem 1rem;border:1.5px solid var(--ink);border-radius:999px}
-
-/* contact */
-.contact p{max-width:30rem;color:var(--muted);margin-bottom:1.5rem}
-.contact .big{font:800 clamp(1.6rem,5vw,3rem)/1.1 var(--display);letter-spacing:-.03em;word-break:break-all;text-decoration-color:var(--mark);text-decoration-thickness:5px;text-underline-offset:6px}
-.contact .big:hover{color:var(--accent)}
-.social{display:flex;gap:1.5rem;margin-top:2rem;font-family:var(--display);font-weight:500}
-footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem;border-top:1px solid var(--line)}
-
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .hero h1 span i{animation:none}
-  .projects a{transition:none}
-}
+:root{--paper:#f4f1ea;--ink:#18221f;--muted:#68736d;--line:#d8d3c8;--accent:#ef5b3f;--blue:#2946d3;--yellow:#f2c94c;--display:"Archivo",system-ui,sans-serif;--body:"Libre Franklin",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}body{background:var(--paper);color:var(--ink);font:400 1.05rem/1.7 var(--body);-webkit-font-smoothing:antialiased}a{color:inherit}:focus-visible{outline:3px solid var(--accent);outline-offset:4px}.wrap{max-width:1180px;margin:auto;padding:0 clamp(1rem,4vw,3rem)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;font:500 .9rem var(--display);letter-spacing:.03em}nav strong{font-size:1rem}nav ul{display:flex;gap:1.5rem;list-style:none}nav a{text-decoration:none}nav a:hover{color:var(--accent)}
+.hero,section{position:relative;min-height:clamp(560px,78vh,760px);margin:1.5rem 0;padding:clamp(3rem,7vw,6rem);background:transparent;border:0;border-radius:0;box-shadow:none;overflow:hidden}.hero:before,section:before{display:none}.hero:after{content:"01 / PORTFOLIO";position:absolute;right:clamp(1.5rem,5vw,5rem);bottom:2rem;font:700 .75rem var(--display);letter-spacing:.12em;color:var(--muted)}.hero h1{font:800 clamp(3.4rem,11vw,9.5rem)/.87 var(--display);font-stretch:125%;letter-spacing:-.065em;text-transform:uppercase;max-width:900px}.hero h1 span{display:block;overflow:hidden}.hero h1 span i{display:inline-block;font-style:normal;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}.hero h1 span:nth-child(2) i{animation-delay:.12s}.hero h1 span:nth-child(3) i{animation-delay:.24s;color:var(--blue)}@keyframes rise{from{transform:translateY(105%)}to{transform:none}}.hero p{max-width:35rem;margin-top:2.5rem;font-size:1.08rem;color:var(--muted)}.hero p b{font-weight:500;color:var(--ink);background:linear-gradient(transparent 60%,var(--yellow) 60%)}.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;font-family:var(--display);font-weight:500}.btn{padding:.8rem 1.4rem;border:2px solid var(--ink);border-radius:999px;text-decoration:none;transition:transform .25s,background .25s,border-color .25s,color .25s}.btn.main{background:var(--ink);color:var(--paper)}.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-4px)}
+section{border-top:0;padding-top:clamp(3rem,7vw,6rem);view-timeline-name:--section;view-timeline-axis:block;animation:section-in linear both;animation-timeline:--section;animation-range:entry 5% cover 35%}section:after{content:"";position:absolute;left:clamp(1.5rem,5vw,5rem);bottom:2rem;width:48px;height:3px;background:var(--blue);border-radius:99px}section h2{font:800 clamp(2.4rem,6vw,5.5rem)/.95 var(--display);letter-spacing:-.06em;text-transform:uppercase;margin-bottom:3rem} @keyframes section-in{from{opacity:0;transform:translateY(42px) scale(.98)}to{opacity:1;transform:none}}section h2:before{display:block;margin-bottom:1rem;font:700 .72rem var(--display);letter-spacing:.15em;color:var(--accent)}#tentang h2:before{content:"02 / PROFILE"}#proyek h2:before{content:"03 / SELECTED WORK"}#keahlian h2:before{content:"04 / TOOLKIT"}#kontak h2:before{content:"05 / NEXT STEP"}.about{display:grid;gap:3rem;grid-template-columns:1fr}.about p+p{margin-top:1.1rem}.facts{font-family:var(--display);font-weight:500;font-size:.95rem;list-style:none;padding:0}.facts li{padding:.75rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem}.facts span{color:var(--muted)}
+.projects{list-style:none;padding:0;border-top:1px solid var(--line)}.projects li{border-bottom:1px solid var(--line)}.projects a{display:grid;gap:.5rem 2rem;padding:1.5rem .5rem;text-decoration:none;grid-template-columns:1fr;transition:.2s}.projects a:hover{background:#fff;padding-left:1.25rem}.projects h3{font:800 1.35rem/1.2 var(--display)}.projects p{color:var(--muted);font-size:.98rem;line-height:1.55}.tag{font:500 .8rem var(--display);color:var(--accent);text-transform:uppercase;letter-spacing:.08em}.skills{display:flex;flex-wrap:wrap;gap:.7rem;list-style:none;padding:0;max-width:700px}.skills li{font:500 .95rem var(--display);padding:.6rem 1rem;border:1.5px solid var(--ink);border-radius:999px;transition:transform .25s,background .25s}.skills li:hover{transform:translateY(-5px) rotate(-2deg);background:var(--yellow)}.contact p{max-width:30rem;color:var(--muted);margin-bottom:1.5rem}.contact .big{font:800 clamp(1.8rem,5vw,4.5rem)/1.1 var(--display);letter-spacing:-.05em;word-break:break-all;text-decoration-color:var(--yellow);text-decoration-thickness:7px;text-underline-offset:8px}.contact .big:hover{color:var(--accent)}.social{display:flex;gap:1.5rem;margin-top:2rem;font:500 1rem var(--display)}footer{padding:1rem 0 3rem;color:#5c645f;font-size:.9rem}
+@media(min-width:800px){.about{grid-template-columns:1fr 2fr;gap:5rem}.projects a{grid-template-columns:1.2fr 2fr auto;align-items:baseline}}
+@media(max-width:600px){nav ul{gap:.65rem;font-size:.78rem}.hero,section{min-height:auto;padding:2.2rem 1.4rem 5rem}.hero h1{font-size:clamp(3.2rem,17vw,6rem)}.hero:after{right:1.4rem}.hero:before,section:before{width:28%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero h1 span i,section{animation:none}.projects a,.btn,.skills li{transition:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<nav aria-label="Navigasi utama">
+<nav aria-label="Main navigation">
   <a href="#top"><strong>Rafli Pratama</strong></a>
   <ul>
-    <li><a href="#tentang">Tentang</a></li>
-    <li><a href="#proyek">Proyek</a></li>
-    <li><a href="#kontak">Kontak</a></li>
+    <li><a href="#tentang">About</a></li>
+    <li><a href="#proyek">Projects</a></li>
+    <li><a href="#kontak">Contact</a></li>
   </ul>
 </nav>
 
@@ -101,58 +39,58 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem;border-top:1px so
     <span><i>Rafli</i></span>
     <span><i>Pratama</i></span>
   </h1>
-  <p>Mahasiswa Universitas Muhammadiyah Yogyakarta yang membangun <b>aplikasi mobile dan web</b>. Saya suka mengubah tugas kuliah menjadi produk yang benar-benar bisa dipakai.</p>
+  <p>A Universitas Muhammadiyah Yogyakarta student building <b>mobile and web applications</b>. I enjoy turning academic assignments into products people can actually use.</p>
   <div class="cta">
-    <a class="btn main" href="#proyek">Lihat proyek</a>
-    <a class="btn" href="mailto:kipxrap@gmail.com">Kirim email</a>
+    <a class="btn main" href="#proyek">View projects</a>
+    <a class="btn" href="mailto:kipxrap@gmail.com">Send an email</a>
   </div>
 </header>
 
 <main>
 <section id="tentang">
-  <h2>Tentang saya</h2>
+  <h2>About me</h2>
   <div class="about">
     <ul class="facts">
-      <li><span>Kampus</span> UMY</li>
-      <li><span>Lokasi</span> Yogyakarta</li>
-      <li><span>Fokus</span> Jaringan &amp; Software Engineering</li>
-      <li><span>Status</span> Terbuka untuk magang</li>
+<li><span>University</span> UMY</li>
+       <li><span>Location</span> Yogyakarta</li>
+       <li><span>Focus</span> Networking &amp; Software Engineering</li>
+       <li><span>Status</span> Open to internships</li>
     </ul>
     <div>
-      <p>Saya mahasiswa Universitas Muhammadiyah Yogyakarta yang gampang penasaran dengan hal baru, terutama di dunia jaringan dan software engineering. Buat saya dua bidang ini saling melengkapi. Aplikasi sebagus apa pun tidak berguna kalau jaringan di bawahnya tidak jalan, dan jaringan yang rapi baru terasa manfaatnya lewat aplikasi yang dipakai orang.</p>
-      <p>Selama kuliah saya sering berpindah topik, dari merancang jaringan antarkota di Cisco Packet Tracer sampai membuat aplikasi Android dengan Jetpack Compose. Sekarang saya sedang belajar membangun sesuatu yang rapi dari awal sampai benar-benar bisa dipakai. Saya terbuka untuk magang atau proyek bersama yang memberi ruang belajar sambil mengerjakan hal nyata.</p>
+      <p>I am a Universitas Muhammadiyah Yogyakarta student who is curious about new things, especially networking and software engineering. To me, these two fields complement each other. No matter how good an application is, it is useless if the network beneath it does not work, and a well-designed network only matters when people can use the applications it supports.</p>
+      <p>During my studies, I have explored different areas, from designing intercity networks in Cisco Packet Tracer to building Android applications with Jetpack Compose. I am currently learning to build polished products from start to finish. I am open to internships or collaborative projects that offer room to learn while working on real-world problems.</p>
     </div>
   </div>
 </section>
 
 <section id="proyek">
-  <h2>Proyek</h2>
+  <h2>Projects</h2>
   <ul class="projects">
     <li><a href="https://github.com/username/proyek-1">
-      <h3>Aplikasi TaxOffice</h3>
-      <p>Aplikasi mobile administrasi perkantoran pajak dengan Kotlin dan Jetpack Compose.</p>
+      <h3>TaxOffice Application</h3>
+      <p>A mobile tax office administration application built with Kotlin and Jetpack Compose.</p>
       <span class="tag">Android</span>
     </a></li>
     <li><a href="https://github.com/username/proyek-2">
-      <h3>Chatbot untuk UMKM</h3>
-      <p>Chatbot website berbasis sales funnel yang membantu pelaku UMKM menjawab pelanggan.</p>
+      <h3>SME Chatbot</h3>
+      <p>A sales-funnel website chatbot that helps small businesses respond to customers.</p>
       <span class="tag">Web · AI</span>
     </a></li>
     <li><a href="https://github.com/username/proyek-3">
       <h3>LaporFasilitas</h3>
-      <p>Sistem pelaporan fasilitas kampus, dari rancangan UI/UX sampai prototype.</p>
+      <p>A campus facility reporting system, from UI/UX design to prototype.</p>
       <span class="tag">UI/UX</span>
     </a></li>
     <li><a href="https://github.com/username/proyek-4">
-      <h3>Jaringan WAN Yogyakarta–Semarang</h3>
-      <p>Simulasi jaringan dua kota dengan konfigurasi router dan CDP di Cisco Packet Tracer.</p>
+      <h3>Yogyakarta–Semarang WAN Network</h3>
+      <p>A two-city network simulation with router and CDP configuration in Cisco Packet Tracer.</p>
       <span class="tag">Jaringan</span>
     </a></li>
   </ul>
 </section>
 
 <section id="keahlian">
-  <h2>Keahlian</h2>
+  <h2>Skills</h2>
   <ul class="skills">
     <li>Kotlin</li><li>Jetpack Compose</li><li>HTML &amp; CSS</li><li>JavaScript</li>
     <li>Git &amp; GitHub</li><li>Figma</li><li>Cisco Packet Tracer</li>
@@ -160,8 +98,8 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem;border-top:1px so
 </section>
 
 <section class="contact" id="kontak">
-  <h2>Mari ngobrol</h2>
-  <p>Punya proyek, lowongan magang, atau sekadar ingin berdiskusi? Kirim pesan, saya biasanya membalas dalam sehari.</p>
+<h2>Let's talk</h2>
+   <p>Have a project, internship opportunity, or just want to talk? Send me a message and I usually reply within a day.</p>
   <a class="big" href="mailto:kipxrap@gmail.com">kipxrap@gmail.com</a>
   <div class="social">
     <a href="https://github.com/username">GitHub</a>
@@ -171,7 +109,7 @@ footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem;border-top:1px so
 </section>
 </main>
 
-<footer>© <span id="y">2026</span> Muhamad Rafli Pratama. Dibuat di Yogyakarta.</footer>
+<footer>© <span id="y">2026</span> Muhamad Rafli Pratama. Made in Yogyakarta.</footer>
 </div>
 <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
