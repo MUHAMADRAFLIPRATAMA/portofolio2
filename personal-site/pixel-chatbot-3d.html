@@ -329,6 +329,15 @@
     camera.lookAt(0, 2.9, 0);
     renderer.render(scene, camera);
   }
+  let scrollTimer = null;
+  let scrollActive = false;
+  window.addEventListener('scroll', () => {
+    scrollActive = true;
+    setEmo('bingung');
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { scrollActive = false; setEmo('netral'); }, 700);
+  }, { passive: true });
+
   loop();
 
   // ================= CHAT =================
