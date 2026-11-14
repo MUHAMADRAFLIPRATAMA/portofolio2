@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pixel - chatbot 8-bit 3D</title>
+<title>Asisten Rafli - chatbot 8-bit 3D</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
   :root { --bg:#1d2b53; --ink:#fff1e8; --blue:#29adff; --yel:#ffec27; --dark:#0b1230; }
@@ -58,8 +58,8 @@
 <body>
 <div id="app">
   <div id="stage"></div>
-  <section id="chat" aria-label="Chat dengan Pixel">
-    <header><b>PIXEL</b><span id="mood">perasaan: netral</span></header>
+  <section id="chat" aria-label="Chat dengan Asisten Rafli">
+    <header><b>ASISTEN RAFLI</b><span id="mood">perasaan: netral</span></header>
     <div id="log" role="log" aria-live="polite"></div>
     <div id="chips"></div>
     <form id="f" autocomplete="off">
@@ -94,7 +94,7 @@
     [/imut|lucu|keren|hebat|pintar|baik banget|mantap|bagus/i, 'malu',
       ['Ih... jangan muji terus, aku jadi malu.', 'A-apa sih... makasih ya. Pipiku jadi merah.']],
     [/siapa (kamu|namamu)|nama ?(mu|kamu)|kamu siapa/i, 'senang',
-      ['Aku Pixel, karakter 8-bit 3D yang tinggal di website ini!']],
+      ['Aku asisten AI Rafli yang tinggal di website ini!']],
     [/apa kabar|gimana kabar|bisa apa/i, 'senang',
       ['Aku baik banget! Aku bisa ngobrol, dan wajah serta badanku ikut merasakan ceritamu.']],
     [/halo|hai\b|hi\b|hei|hey|pagi|siang|sore|malam|assalam|terima kasih|makasih|thanks|haha|wkwk|hehe|lol|senang|bahagia|yey|asik|menang|lulus/i, 'senang',
@@ -112,7 +112,7 @@
     if (!r.ok) throw new Error(data.error || 'AI gagal');
     return { emosi: 'senang', teks: data.reply || 'Maaf, aku belum mendapat jawaban.' };
   }
-  const CHIPS = ['Halo Pixel!', 'Siapa Rafli?', 'Apa keahlian Rafli?', 'Ceritakan proyek Rafli', 'Rafli kuliah di mana?', 'Bagaimana menghubungi Rafli?'];
+  const CHIPS = ['Halo!', 'Siapa Rafli?', 'Apa keahlian Rafli?', 'Ceritakan proyek Rafli', 'Rafli kuliah di mana?', 'Bagaimana menghubungi Rafli?'];
 
   // ================= 3D =================
   const TAU = Math.PI * 2;
@@ -369,7 +369,7 @@
 
   // Sapaan pembuka
   setEmo('senang');
-  type(bubble('p', ''), 'Halo! Aku Pixel. Ajak aku ngobrol, wajah dan badanku bakal ikut merasakan!')
+  type(bubble('p', ''), 'Halo! Aku asisten AI milik Muhamad Rafli Pratama. Ajak aku ngobrol tentang website dan karya Rafli!')
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
