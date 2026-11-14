@@ -29,29 +29,28 @@
   form button:active { transform:translateY(3px); box-shadow:0 1px 0 #ab5236; }
   form button:disabled { opacity:.5; cursor:wait; }
   button:focus-visible, input:focus-visible { outline:3px solid var(--yel); outline-offset:2px; }
+
   @media (max-width:760px) {
-    html, body { height:auto; min-height:100%; overflow-x:hidden; overflow-y:auto; }
-    #app { display:flex; flex-direction:column; height:auto; min-height:700px; overflow:visible; }
-    #stage { height:280px; min-height:280px; flex:0 0 280px; }
-    #chat { height:420px; min-height:420px; flex:0 0 420px; border:0; border-top:3px solid var(--blue); }
-    header { padding:12px; border-bottom:3px solid var(--bg); }
-    header b { font-size:10px; }
-    #mood { font-size:17px; }
-    #log { padding:10px; gap:8px; }
-    .b { max-width:92%; padding:7px 9px; font-size:20px; }
-    #chips { gap:5px; padding:0 10px 8px; max-height:78px; overflow-y:auto; }
-    #chips button { font-size:16px; padding:4px 7px; }
-    form { gap:6px; padding:9px 10px 12px; }
-    input { font-size:20px; padding:8px; }
-    form button { font-size:9px; padding:0 10px; }
-  }
-  @media (max-width:380px) {
-    #stage { min-height:220px; height:220px; flex-basis:220px; }
-    #chat { min-height:430px; height:430px; flex-basis:430px; }
+    html, body { width:100%; height:100%; min-height:0; overflow:hidden; }
+    #app { width:100%; height:100svh; min-height:0; overflow:hidden; }
+    #stage { width:100%; height:30svh; min-height:0; flex:0 0 30svh; overflow:hidden; }
+    #chat { width:100%; height:70svh; min-height:0; flex:0 0 70svh; overflow:hidden; }
+    header { flex:0 0 38px; padding:7px 10px; }
     header b { font-size:9px; }
-    #mood { font-size:15px; }
-    .b { font-size:18px; }
-    form button { font-size:8px; padding:0 8px; }
+    #mood { font-size:14px; }
+    #log { min-height:0; padding:7px 8px; gap:5px; overflow-y:auto; }
+    .b { max-width:94%; padding:5px 7px; font-size:17px; line-height:1.05; box-shadow:2px 2px 0 rgba(0,0,0,.45); }
+    #chips { flex:0 0 auto; max-height:64px; overflow:hidden; gap:3px; padding:0 7px 5px; }
+    #chips button { font-size:13px; padding:3px 5px; border-width:1px; }
+    form { flex:0 0 47px; gap:5px; padding:6px 7px 7px; }
+    input { font-size:17px; padding:6px 7px; border-width:2px; }
+    form button { font-size:8px; padding:0 8px; box-shadow:0 2px 0 #ab5236; }
+  }
+  @media (max-height:650px) and (max-width:760px) {
+    #stage { height:26svh; flex-basis:26svh; }
+    #chat { height:74svh; flex-basis:74svh; }
+    .b { font-size:15px; }
+    #chips button { font-size:12px; padding:2px 4px; }
   }
 </style>
 </head>
