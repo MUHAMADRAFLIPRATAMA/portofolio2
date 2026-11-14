@@ -382,5 +382,5 @@
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
-<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood);if(e.data&&e.data.type==='rafli-mode')document.getElementById('app').classList.toggle('scroll-animation-only',!!e.data.floating)});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
+<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood);if(e.data&&e.data.type==='rafli-mode'){document.getElementById('app').classList.toggle('scroll-animation-only',!!e.data.floating);camera.position.z=e.data.floating?30:15;camera.updateProjectionMatrix()}});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
 </html>
