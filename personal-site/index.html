@@ -15,7 +15,7 @@
 nav{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;font:500 .9rem var(--display);letter-spacing:.03em}nav strong{font-size:1rem}nav ul{display:flex;gap:1.5rem;list-style:none}nav a{text-decoration:none}nav a:hover{color:var(--accent)}
 .hero,section{position:relative;min-height:clamp(560px,78vh,760px);margin:1.5rem 0;padding:clamp(3rem,7vw,6rem);background:transparent;border:0;border-radius:0;box-shadow:none;overflow:hidden}.hero:before,section:before{display:none}.hero:after{content:"01 / PORTFOLIO";position:absolute;right:clamp(1.5rem,5vw,5rem);bottom:2rem;font:700 .75rem var(--display);letter-spacing:.12em;color:var(--muted)}.hero h1{font:800 clamp(3.2rem,10vw,8.5rem)/.87 var(--display);font-stretch:125%;letter-spacing:-.065em;text-transform:uppercase;max-width:900px}.hero h1 span{display:block;max-width:100%;padding-right:.2em}.hero h1 span i{display:inline-block;max-width:100%;font-style:normal;white-space:nowrap;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}.hero h1 span:nth-child(2) i{animation-delay:.14s}.hero h1 span:nth-child(3) i{animation-delay:.28s;color:var(--blue)}@keyframes rise{from{opacity:0;transform:translateY(105%);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}.hero p{max-width:35rem;margin-top:2.5rem;font-size:1.08rem;color:var(--muted);animation:fade-up .8s .48s cubic-bezier(.2,.8,.2,1) both}.hero p b{font-weight:500;color:var(--ink);background:linear-gradient(transparent 60%,var(--yellow) 60%)}.cta{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;font-family:var(--display);font-weight:500;animation:fade-up .8s .62s cubic-bezier(.2,.8,.2,1) both}.btn{padding:.8rem 1.4rem;border:2px solid var(--ink);border-radius:999px;text-decoration:none;transition:transform .25s,background .25s,border-color .25s,color .25s}.btn.main{background:var(--ink);color:var(--paper)}.btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-4px)}
 section{border-top:0;padding-top:clamp(3rem,7vw,6rem);view-timeline-name:--section;view-timeline-axis:block;animation:section-in linear both;animation-timeline:--section;animation-range:entry 5% cover 35%}section:after{content:"";position:absolute;left:clamp(1.5rem,5vw,5rem);bottom:2rem;width:48px;height:3px;background:var(--blue);border-radius:99px}section h2{font:800 clamp(2.4rem,6vw,5.5rem)/.95 var(--display);letter-spacing:-.06em;text-transform:uppercase;margin-bottom:3rem} @keyframes section-in{from{opacity:0;transform:translateY(42px) scale(.98)}to{opacity:1;transform:none}}@keyframes fade-up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}section h2:before{display:block;margin-bottom:1rem;font:700 .72rem var(--display);letter-spacing:.15em;color:var(--accent)}#tentang h2:before{content:"02 / PROFILE"}#proyek h2:before{content:"03 / SELECTED WORK"}#keahlian h2:before{content:"04 / TOOLKIT"}#kontak h2:before{content:"05 / NEXT STEP"}.workflow{position:relative;min-height:300px;margin:0 0 3rem;padding:2rem 1.5rem;background:#171b1a;border:1px solid #2b3732;overflow:hidden;color:#f4f1ea}.workflow:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#4c5a53 1px,transparent 1px);background-size:18px 18px;opacity:.35}.workflow svg{position:relative;display:block;width:100%;height:auto;min-width:760px}.workflow path{fill:none;stroke:#00c66b;stroke-width:2}.workflow .flow{stroke-dasharray:8 8;animation:flow 1.1s linear infinite}.workflow .node{fill:#252b29;stroke:#00b85f;stroke-width:1.5}.workflow text{font-family:var(--display);font-size:12px;fill:#f4f1ea}.workflow .sub{font-size:9px;fill:#94a39a}.workflow .check{fill:#00c66b;font-size:16px}.workflow .pulse{animation:node-pulse 2.8s ease-in-out infinite}.workflow .pulse:nth-of-type(2){animation-delay:.4s}.workflow .pulse:nth-of-type(3){animation-delay:.8s}.workflow .pulse:nth-of-type(4){animation-delay:1.2s}.workflow .pulse:nth-of-type(5){animation-delay:1.6s}@keyframes flow{to{stroke-dashoffset:-16}}@keyframes node-pulse{0%,100%{filter:drop-shadow(0 0 0 transparent)}45%{filter:drop-shadow(0 0 8px #00c66b)}}.about{display:grid;gap:3rem;grid-template-columns:1fr}.about p+p{margin-top:1.1rem}.facts{font-family:var(--display);font-weight:500;font-size:.95rem;list-style:none;padding:0}.facts li{padding:.75rem 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem}.facts span{color:var(--muted)}
-.projects{list-style:none;padding:0;border-top:1px solid var(--line)}.projects li{border-bottom:1px solid var(--line)}.projects a{display:grid;gap:.5rem 2rem;padding:1.5rem .5rem;text-decoration:none;grid-template-columns:1fr;transition:.2s}.projects a:hover{background:#fff;padding-left:1.25rem}.projects h3{font:800 1.35rem/1.2 var(--display)}.projects p{color:var(--muted);font-size:.98rem;line-height:1.55}.tag{font:500 .8rem var(--display);color:var(--accent);text-transform:uppercase;letter-spacing:.08em}.skills{display:flex;flex-wrap:wrap;gap:.7rem;list-style:none;padding:0;max-width:700px}.skills li{font:500 .95rem var(--display);padding:.6rem 1rem;border:1.5px solid var(--ink);border-radius:999px;transition:transform .25s,background .25s}.skills li:hover{transform:translateY(-5px) rotate(-2deg);background:var(--yellow)}.contact p{max-width:30rem;color:var(--muted);margin-bottom:1.5rem}.contact .big{font:800 clamp(1.8rem,5vw,4.5rem)/1.1 var(--display);letter-spacing:-.05em;word-break:break-all;text-decoration-color:var(--yellow);text-decoration-thickness:7px;text-underline-offset:8px}.contact .big:hover{color:var(--accent)}.social{display:flex;gap:1.5rem;margin-top:2rem;font:500 1rem var(--display)}footer{padding:1rem 0 3rem;color:#5c645f;font-size:.9rem}
+.projects{list-style:none;padding:0;border-top:1px solid var(--line)}.projects li{border-bottom:1px solid var(--line)}.projects a{display:grid;gap:.5rem 2rem;padding:1.5rem .5rem;text-decoration:none;grid-template-columns:1fr;transition:.2s}.projects a:hover{background:#fff;padding-left:1.25rem}.projects h3{font:800 1.35rem/1.2 var(--display)}.projects p{color:var(--muted);font-size:.98rem;line-height:1.55}.project-card{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;padding:1.5rem .5rem}.project-card .tag{display:block;margin-top:.5rem}.project-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.75rem}.project-actions .btn{font-size:.8rem;padding:.4rem 1rem;text-align:center}.tag{font:500 .8rem var(--display);color:var(--accent);text-transform:uppercase;letter-spacing:.08em}.skills{display:flex;flex-wrap:wrap;gap:.7rem;list-style:none;padding:0;max-width:700px}.skills li{font:500 .95rem var(--display);padding:.6rem 1rem;border:1.5px solid var(--ink);border-radius:999px;transition:transform .25s,background .25s}.skills li:hover{transform:translateY(-5px) rotate(-2deg);background:var(--yellow)}.contact p{max-width:30rem;color:var(--muted);margin-bottom:1.5rem}.contact .big{font:800 clamp(1.8rem,5vw,4.5rem)/1.1 var(--display);letter-spacing:-.05em;word-break:break-all;text-decoration-color:var(--yellow);text-decoration-thickness:7px;text-underline-offset:8px}.contact .big:hover{color:var(--accent)}.social{display:flex;gap:1.5rem;margin-top:2rem;font:500 1rem var(--display)}footer{padding:1rem 0 3rem;color:#5c645f;font-size:.9rem}
 @media(min-width:800px){.about{grid-template-columns:1fr 2fr;gap:5rem}.projects a{grid-template-columns:1.2fr 2fr auto;align-items:baseline}}
 @media(max-width:600px){nav ul{gap:.65rem;font-size:.78rem}.hero,section{min-height:auto;padding:2.2rem 1.4rem 5rem}.hero h1{font-size:clamp(2.35rem,13vw,5.5rem);font-stretch:100%;letter-spacing:-.075em;line-height:.9}.hero h1 span{padding-right:.16em}.hero:after{right:1.4rem}.hero:before,section:before{width:28%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero h1 span i,.hero p,.cta,section{animation:none}.projects a,.btn,.skills li{transition:none}}
@@ -117,28 +117,28 @@ section{border-top:0;padding-top:clamp(3rem,7vw,6rem);view-timeline-name:--secti
           <p>Hermes Agent Office is an AI-powered monitoring website built with Hermes Agent and 9Router. It includes an agent that monitors raflipratama.my.id, tracking uptime, service health, and monitoring activity in real time.</p>
           <span class="tag">9Router · 3D Monitoring</span>
         </a></li>
-       <li><div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;padding:1.5rem .5rem">
-         <div>
-           <h3>Bot-like Account Detection</h3>
-           <p style="margin-top:.5rem">Machine learning system for detecting bot-like and coordinated account behavior on X.</p>
-           <span class="tag" style="display:block; margin-top:.5rem">Machine Learning · Python</span>
-         </div>
-         <div style="display:flex;flex-direction:column;gap:.75rem">
-           <a href="https://github.com/MUHAMADRAFLIPRATAMA/machine-learning-deteksi-bot" target="_blank" rel="noopener noreferrer" class="btn" style="font-size: .8rem; padding: .4rem 1rem; text-align: center;">GitHub</a>
-           <a href="https://machine-learning-system-for-detecting-bot-like-a-production.up.railway.app/" target="_blank" rel="noopener noreferrer" class="btn" style="font-size: .8rem; padding: .4rem 1rem; text-align: center;">Web Demo</a>
-         </div>
-       </div></li>
-       <li><div style="display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;padding:1.5rem .5rem">
-         <div>
-           <h3>Detektor Pesan Penipuan</h3>
-           <p style="margin-top:.5rem">Aplikasi machine learning untuk mengklasifikasikan pesan SMS atau WhatsApp sebagai normal atau penipuan.</p>
-           <span class="tag" style="display:block; margin-top:.5rem">Machine Learning · Python · TF-IDF</span>
-         </div>
-         <div style="display:flex;flex-direction:column;gap:.75rem">
-           <a href="https://github.com/MUHAMADRAFLIPRATAMA/detektor-sms-penipuan" target="_blank" rel="noopener noreferrer" class="btn" style="font-size: .8rem; padding: .4rem 1rem; text-align: center;">GitHub</a>
-            <a href="" class="btn" style="font-size: .8rem; padding: .4rem 1rem; text-align: center;">Case Study</a>
-         </div>
-       </div></li>
+        <li><div class="project-card">
+          <div>
+            <h3>Bot-like Account Detection</h3>
+            <p>Machine learning system for detecting bot-like and coordinated account behavior on X.</p>
+            <span class="tag">Machine Learning · Python</span>
+          </div>
+          <div class="project-actions">
+            <a href="https://github.com/MUHAMADRAFLIPRATAMA/machine-learning-deteksi-bot" target="_blank" rel="noopener noreferrer" class="btn">GitHub</a>
+            <a href="https://machine-learning-system-for-detecting-bot-like-a-production.up.railway.app/" target="_blank" rel="noopener noreferrer" class="btn">Web Demo</a>
+          </div>
+        </div></li>
+        <li><div class="project-card">
+          <div>
+            <h3>Detektor Pesan Penipuan</h3>
+            <p>Aplikasi machine learning untuk mengklasifikasikan pesan SMS atau WhatsApp sebagai normal atau penipuan.</p>
+            <span class="tag">Machine Learning · Python · TF-IDF</span>
+          </div>
+          <div class="project-actions">
+            <a href="https://github.com/MUHAMADRAFLIPRATAMA/detektor-sms-penipuan" target="_blank" rel="noopener noreferrer" class="btn">GitHub</a>
+            <a href="#kontak" class="btn">Case Study</a>
+          </div>
+        </div></li>
 
    </ul>
 </section>
