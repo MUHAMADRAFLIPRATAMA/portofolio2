@@ -54,7 +54,7 @@
     #chips button { font-size:11px; }
   }
 </style>
-<style>.scroll-animation-only #chat{display:none!important}.scroll-animation-only #stage{width:100%!important;height:100%!important;min-height:100%!important;flex:1!important}.scroll-animation-only canvas{width:100%!important;height:100%!important}</style></head>
+</head>
 <body>
 <div id="app">
   <div id="stage"></div>
@@ -253,7 +253,7 @@
     const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
     const P = PIKSEL_MANUAL || Math.max(2, Math.round(h / 380));
     renderer.setSize(Math.floor(w / P), Math.floor(h / P), false);
-    camera.aspect = w / h; camera.position.z = w / h < 0.8 ? 30 : 22; camera.updateProjectionMatrix();
+    camera.aspect = w / h; camera.position.z = w / h < 0.8 ? 22 : 15; camera.updateProjectionMatrix();
   }
   new ResizeObserver(resize).observe(stage); resize();
 
@@ -326,18 +326,9 @@
     spin.rotation.y = userYaw;
     camera.position.x = damp(camera.position.x, px * 1.2, 3, dt);
     camera.position.y = damp(camera.position.y, 4.6 - py * 0.5, 3, dt);
-    camera.lookAt(0, 3.1, 0);
+    camera.lookAt(0, 2.9, 0);
     renderer.render(scene, camera);
   }
-  let scrollTimer = null;
-  let scrollActive = false;
-  window.addEventListener('scroll', () => {
-    scrollActive = true;
-    setEmo('bingung');
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => { scrollActive = false; setEmo('netral'); }, 700);
-  }, { passive: true });
-
   loop();
 
   // ================= CHAT =================
@@ -382,5 +373,5 @@
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
-<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood);if(e.data&&e.data.type==='rafli-mode'){document.getElementById('app').classList.toggle('scroll-animation-only',!!e.data.floating);camera.position.z=e.data.floating?42:22;camera.updateProjectionMatrix()}});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
+</body>
 </html>
