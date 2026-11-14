@@ -382,5 +382,5 @@
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
-</body>
+<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood)});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
 </html>
