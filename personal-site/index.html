@@ -51,7 +51,7 @@ section{border-top:0;padding-top:clamp(3rem,7vw,6rem);view-timeline-name:--secti
 .hero p,.hero .cta{max-width:40rem!important}
 .pixel-panel{width:100%!important;min-width:0!important;height:min(560px,72vh)!important}
 @media(max-width:760px){.hero{display:block!important;padding:2rem 0 4rem!important}.hero h1{font-size:clamp(2.7rem,13vw,6rem)!important}.hero h1 span,.hero h1 span i{max-width:100%!important;width:auto!important;white-space:nowrap!important}.pixel-panel{height:640px!important;margin-top:1.5rem!important;overflow:hidden!important}.pixel-panel iframe{display:block;width:100%!important;height:640px!important;min-height:640px!important}}
-</style></head>
+</style><style>body.dark-mode{--paper:#11131a;--ink:#f5f7fb;--muted:#aab2c0;--line:#303746;background:#11131a;color:#f5f7fb}body.dark-mode nav,body.dark-mode .hero,body.dark-mode section{background:#11131a;color:#f5f7fb}.dark-toggle{position:fixed;right:1.2rem;bottom:1.2rem;z-index:10000;border:2px solid currentColor;border-radius:999px;background:transparent;color:inherit;padding:.55rem .8rem;cursor:pointer;font:inherit}.dark-toggle:hover{background:#29adff;color:#11131a}</style></head>
 <body>
 <div class="wrap">
 
@@ -166,5 +166,5 @@ section{border-top:0;padding-top:clamp(3rem,7vw,6rem);view-timeline-name:--secti
 <footer>© <span id="y">2026</span> Muhamad Rafli Pratama. Made in Yogyakarta.</footer>
 </div>
 <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-</body>
+<script>(()=>{const b=document.createElement('button');b.className='dark-toggle';b.type='button';b.setAttribute('aria-label','Ganti mode warna');const apply=dark=>{document.body.classList.toggle('dark-mode',dark);b.textContent=dark?'☀ Terang':'☾ Gelap';b.setAttribute('aria-pressed',String(dark));localStorage.setItem('rafli-dark-mode',dark?'1':'0')};b.addEventListener('click',()=>apply(!document.body.classList.contains('dark-mode')));document.body.appendChild(b);apply(localStorage.getItem('rafli-dark-mode')==='1')})()</script></body>
 </html>
