@@ -54,7 +54,7 @@
     #chips button { font-size:11px; }
   }
 </style>
-</head>
+<style>.scroll-animation-only #chat{display:none!important}.scroll-animation-only #stage{width:100%!important;height:100%!important;min-height:100%!important;flex:1!important}</style></head>
 <body>
 <div id="app">
   <div id="stage"></div>
@@ -382,5 +382,5 @@
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
-<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood)});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
+<script>addEventListener('message',e=>{if(e.data&&e.data.type==='rafli-mood')setEmo(e.data.mood);if(e.data&&e.data.type==='rafli-mode')document.getElementById('app').classList.toggle('scroll-animation-only',!!e.data.floating)});document.getElementById('stage').addEventListener('click',()=>{if(parent!==window)parent.postMessage({type:'rafli-pixel-click'},'*')});</script></body>
 </html>
