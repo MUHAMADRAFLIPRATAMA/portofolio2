@@ -30,10 +30,10 @@
   form button:disabled { opacity:.5; cursor:wait; }
   button:focus-visible, input:focus-visible { outline:3px solid var(--yel); outline-offset:2px; }
   @media (max-width:760px) {
-    html, body { min-height:100%; overflow:auto; }
-    #app { display:flex; flex-direction:column; height:auto; min-height:100dvh; }
-    #stage { height:38dvh; min-height:230px; flex:0 0 38dvh; }
-    #chat { height:62dvh; min-height:430px; flex:0 0 62dvh; border:0; border-top:3px solid var(--blue); }
+    html, body { height:100%; min-height:0; overflow:hidden; }
+    #app { display:flex; flex-direction:column; height:100dvh; min-height:0; overflow:hidden; }
+    #stage { height:34dvh; min-height:0; flex:0 0 34dvh; }
+    #chat { height:66dvh; min-height:0; flex:0 0 66dvh; border:0; border-top:3px solid var(--blue); }
     header { padding:12px; border-bottom:3px solid var(--bg); }
     header b { font-size:10px; }
     #mood { font-size:17px; }
@@ -47,7 +47,7 @@
   }
   @media (max-width:380px) {
     #stage { min-height:200px; }
-    #chat { min-height:410px; }
+    #chat { min-height:0; }
     header b { font-size:9px; }
     #mood { font-size:15px; }
     .b { font-size:18px; }
