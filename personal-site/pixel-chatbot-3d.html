@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel - chatbot 8-bit 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#1d2b53; --ink:#fff1e8; --blue:#29adff; --yel:#ffec27; --dark:#0b1230; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:transparent !important; color:var(--ink); font-family:'VT323', ui-monospace, Menlo, Consolas, monospace; }
+  #app { display:grid; grid-template-columns:minmax(0,1fr) 400px; height:100%; background:transparent !important; }
+  #stage { position:relative; min-height:0; background:transparent !important; }
+  canvas { width:100%; height:100%; display:block; image-rendering:pixelated; touch-action:none; cursor:grab; }
+  #chat { display:flex; flex-direction:column; min-height:0; background:var(--dark); border-left:4px solid var(--blue); }
+  header { padding:14px 16px; display:flex; justify-content:space-between; align-items:center; gap:8px; border-bottom:4px solid var(--bg); }
+  header b { font:12px 'Press Start 2P', monospace; }
+  #mood { font-size:20px; color:var(--yel); }
+  #log { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; }
+  .b { max-width:86%; padding:8px 12px; font-size:22px; line-height:1.15; box-shadow:3px 3px 0 rgba(0,0,0,.5); overflow-wrap:anywhere; }
+  .u { align-self:flex-end; background:var(--blue); color:var(--dark); }
+  .p { align-self:flex-start; background:var(--ink); color:var(--dark); }
+  #chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 14px 10px; }
+  #chips button { font:inherit; font-size:19px; padding:3px 9px; color:var(--ink); background:var(--bg); border:2px solid var(--blue); cursor:pointer; }
+  #chips button:hover { background:var(--blue); color:var(--dark); }
+  form { display:flex; gap:8px; padding:12px 14px 14px; border-top:4px solid var(--bg); }
+  input { flex:1; min-width:0; font:inherit; font-size:23px; padding:8px 10px; color:var(--ink); background:var(--bg); border:3px solid var(--blue); }
+  form button { font:11px 'Press Start 2P', monospace; padding:0 14px; color:var(--dark); background:var(--yel); border:0; cursor:pointer; box-shadow:0 4px 0 #ab5236; }
+  form button:active { transform:translateY(3px); box-shadow:0 1px 0 #ab5236; }
+  form button:disabled { opacity:.5; cursor:wait; }
+  button:focus-visible, input:focus-visible { outline:3px solid var(--yel); outline-offset:2px; }
+  @media (max-width:760px) { #app { grid-template-columns:1fr; grid-template-rows:42% 58%; } #chat { border-left:0; border-top:4px solid var(--blue); } }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage"></div>
+  <section id="chat" aria-label="Chat dengan Pixel">
+    <header><b>PIXEL</b><span id="mood">perasaan: netral</span></header>
+    <div id="log" role="log" aria-live="polite"></div>
+    <div id="chips"></div>
+    <form id="f" autocomplete="off">
+      <input id="q" aria-label="Tulis pesan" placeholder="Tulis pesan..." maxlength="200">
+      <button id="go">KIRIM</button>
+    </form>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  // ================= PENGATURAN =================
+  const WARNA = { kulit:0xffccaa, rambut:0x5f574f, baju:0x29adff, celana:0x7e2553, sepatu:0x1d2b53, lantai1:0x008751, lantai2:0x00a85a };
+  const PIKSEL_MANUAL = 0;  // 0 = otomatis; 1 = sangat halus; 4 = kotak besar
+  const KEHALUSAN = 14;
+
+  // ================= OTAK CHATBOT =================
+  // Ganti fungsi ini kalau mau pakai AI sungguhan. Kembalikan {emosi, teks}.
+  // emosi: netral | senang | sedih | marah | kaget | bingung | malu | cinta
+  // Contoh: const r = await fetch('/api/chat', {method:'POST', body:JSON.stringify({pesan:teks})}); return r.json();
+  // PENTING: API key AI jangan ditaruh di sini, simpan di server kamu.
+  const ATURAN = [
+    [/bodoh|goblok|tolol|bego|jelek|benci|sampah|nyebelin|brengsek|anjing|payah/i, 'marah',
+      ['Hei! Itu kasar banget. Aku jadi kesal tau!', 'Hmph! Aku nggak suka dikatain begitu. Minta maaf dulu dong.', 'Grr... kata-katamu bikin aku marah!']],
+    [/sedih|nangis|menangis|kecewa|galau|kesepian|sendirian|kangen|capek|lelah|stres|stress|patah hati|gagal|putus/i, 'sedih',
+      ['Aduh... aku ikut sedih dengernya. Aku di sini kok, ceritain aja pelan-pelan.', 'Hiks... peluk virtual ya. Kamu nggak sendirian.', 'Kedengarannya berat banget. Mau cerita lebih banyak?']],
+    [/cinta|sayang|love|cantik|ganteng|rindu|suka kamu/i, 'cinta',
+      ['Eh... aku juga sayang kamu! Hatiku jadi berdebar-debar.', 'Kamu bikin hatiku penuh pixel merah muda!']],
+    [/wow|astaga|serius|hah\b|gila|kaget|ngagetin/i, 'kaget',
+      ['HAH?! Beneran?! Aku sampai loncat!', 'Astaga! Aku nggak nyangka sama sekali!']],
+    [/imut|lucu|keren|hebat|pintar|baik banget|mantap|bagus/i, 'malu',
+      ['Ih... jangan muji terus, aku jadi malu.', 'A-apa sih... makasih ya. Pipiku jadi merah.']],
+    [/siapa (kamu|namamu)|nama ?(mu|kamu)|kamu siapa/i, 'senang',
+      ['Aku Pixel, karakter 8-bit 3D yang tinggal di website ini!']],
+    [/apa kabar|gimana kabar|bisa apa/i, 'senang',
+      ['Aku baik banget! Aku bisa ngobrol, dan wajah serta badanku ikut merasakan ceritamu.']],
+    [/halo|hai\b|hi\b|hei|hey|pagi|siang|sore|malam|assalam|terima kasih|makasih|thanks|haha|wkwk|hehe|lol|senang|bahagia|yey|asik|menang|lulus/i, 'senang',
+      ['Halo! Senang banget ketemu kamu!', 'Yey! Hari ini jadi seru deh!', 'Hehe, aku senang kamu mampir!']]
+  ];
+  async function jawab(teks) {
+    const history = [...document.querySelectorAll('#log .b')].slice(-11).map(el => ({
+      role: el.classList.contains('u') ? 'user' : 'assistant', content: el.textContent
+    }));
+    const r = await fetch('/api/chat', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ messages: [...history, { role: 'user', content: teks }] })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'AI gagal');
+    return { emosi: 'senang', teks: data.reply || 'Maaf, aku belum mendapat jawaban.' };
+  }
+  const CHIPS = ['Halo!', 'Aku lagi sedih', 'Kamu lucu banget', 'Wow, serius?', 'Kamu bodoh', 'Aku sayang kamu', 'Apa itu quantum?'];
+
+  // ================= 3D =================
+  const TAU = Math.PI * 2;
+  const damp = (a, b, k, dt) => a + (b - a) * (1 - Math.exp(-k * dt));
+  const hex = n => '#' + n.toString(16).padStart(6, '0');
+
+  const stage = document.getElementById('stage');
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(1); renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  stage.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.background = null;
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  camera.position.set(0, 4.6, 15);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.62));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+  sun.position.set(5, 9, 7); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024);
+  Object.assign(sun.shadow.camera, { left:-8, right:8, top:8, bottom:-8, near:1, far:30 });
+  sun.shadow.bias = -0.002; scene.add(sun);
+
+  function tex(w, h, draw) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    draw(c.getContext('2d'));
+    const t = new THREE.CanvasTexture(c); t.magFilter = t.minFilter = THREE.NearestFilter; return t;
+  }
+  const solid = c => new THREE.MeshLambertMaterial({ color:c });
+
+  // Wajah 16x16: mata + mulut + tambahan (pipi merah, air mata, keringat)
+  const EMO = {   // [mata, mulut, tambahan]
+    netral:['open','smile',''], berpikir:['up','flat',''], senang:['happy','open',''],
+    sedih:['sad','frown','tear'], marah:['angry','teeth','anger'], kaget:['wide','small','sweat'],
+    bingung:['conf','squig',''], malu:['happy','small','blush'], cinta:['heart','smile','blush']
+  };
+  const faceCache = {};
+  function face(e, m, x) {
+    const key = e + m + x;
+    return faceCache[key] || (faceCache[key] = new THREE.MeshLambertMaterial({ map: tex(16, 16, g => {
+      const px = (a, b, c, w = 1, h = 1) => { g.fillStyle = c; g.fillRect(a, b, w, h); };
+      const hair = hex(WARNA.rambut), ink = '#1d2b53', lip = '#7e2553', pink = '#ff77a8', white = '#fff1e8';
+      px(0,0,hex(WARNA.kulit),16,16);
+      px(0,0,hair,16,3); px(0,3,hair,7,1); px(9,3,hair,7,1); px(0,4,hair,2,1); px(14,4,hair,2,1);
+      px(7,9,'#f0b090',2,1); px(2,10,pink,2,1); px(12,10,pink,2,1);
+      const open = () => { px(3,6,ink,2,3); px(11,6,ink,2,3); px(3,6,white); px(11,6,white); };
+      if (e === 'open') open();
+      if (e === 'closed') { px(3,8,ink,2,1); px(11,8,ink,2,1); }
+      if (e === 'happy') [[2,8],[3,7],[4,7],[5,8],[10,8],[11,7],[12,7],[13,8]].forEach(p => px(p[0], p[1], ink));
+      if (e === 'sad') { open(); px(2,5,ink,2); px(4,4,ink,2); px(10,4,ink,2); px(12,5,ink,2); }
+      if (e === 'angry') { px(3,7,ink,2,2); px(11,7,ink,2,2); px(2,4,ink,2); px(4,5,ink,2); px(10,5,ink,2); px(12,4,ink,2); }
+      if (e === 'wide') { px(2,5,white,4,5); px(10,5,white,4,5); px(3,7,ink,2,2); px(11,7,ink,2,2); }
+      if (e === 'conf') { open(); px(2,5,ink,4); px(10,4,ink,4); }
+      if (e === 'up') { px(3,5,ink,2,3); px(11,5,ink,2,3); px(3,5,white); px(11,5,white); }
+      if (e === 'heart') ['.#.#.','#####','.###.','..#..'].forEach((r, y) =>
+        [...r].forEach((c, i) => { if (c === '#') { px(2 + i, 6 + y, '#ff004d'); px(9 + i, 6 + y, '#ff004d'); } }));
+      if (m === 'smile') { px(6,11,lip,4); px(5,10,lip); px(10,10,lip); }
+      if (m === 'open') { px(6,10,lip,4,3); px(7,12,pink,2); }
+      if (m === 'flat') px(6,11,lip,4);
+      if (m === 'frown') { px(6,11,lip,4); px(5,12,lip); px(10,12,lip); }
+      if (m === 'small') px(7,10,lip,2,3);
+      if (m === 'squig') [[5,12],[6,11],[7,12],[8,11],[9,12],[10,11]].forEach(p => px(p[0], p[1], lip));
+      if (m === 'teeth') { px(5,10,white,6,3); px(5,11,lip,6); px(8,10,lip,1,3); }
+      if (x === 'blush') { px(1,9,pink,3,2); px(12,9,pink,3,2); }
+      if (x === 'anger') { px(1,9,'#ff004d',3,2); px(12,9,'#ff004d',3,2); }
+      if (x === 'tear') { px(3,9,'#29adff',1,3); px(12,9,'#29adff',1,3); }
+      if (x === 'sweat') { px(14,6,'#29adff',1,2); px(14,8,'#29adff'); }
+    })}));
+  }
+
+  const chest = new THREE.MeshLambertMaterial({ map: tex(16, 16, g => {
+    g.fillStyle = hex(WARNA.baju); g.fillRect(0,0,16,16);
+    g.fillStyle = hex(WARNA.kulit); g.fillRect(6,0,4,1);
+    g.fillStyle = '#ab5236'; g.fillRect(0,14,16,2); g.fillStyle = '#ffec27'; g.fillRect(7,14,2,2);
+    g.fillStyle = '#ff004d';
+    ['.##.##.','#######','#######','.#####.','..###..','...#...'].forEach((r, y) => [...r].forEach((c, x) => { if (c === '#') g.fillRect(5 + x, 4 + y, 1, 1); }));
+  })});
+
+  const shirt = solid(WARNA.baju), skin = solid(WARNA.kulit), hairM = solid(WARNA.rambut), pants = solid(WARNA.celana), shoe = solid(WARNA.sepatu);
+  const box = (w, h, d, m, x = 0, y = 0, z = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); b.castShadow = true; return b; };
+
+  const hero = new THREE.Group();
+  const upper = new THREE.Group(); upper.position.y = 1.6; hero.add(upper);
+  upper.add(box(1.8, 1.8, 0.9, [shirt, shirt, shirt, shirt, chest, shirt], 0, 0.9, 0));
+  const head = new THREE.Group(); head.position.y = 1.9; upper.add(head);
+  const headMesh = box(1.7, 1.7, 1.7, [hairM, hairM, hairM, skin, face('open','smile',''), hairM], 0, 0.85, 0);
+  head.add(headMesh, box(1.8, 0.5, 1.8, hairM, 0, 1.6, 0));
+  [-1, 1].forEach(s => head.add(box(0.2, 0.45, 0.35, skin, s * 0.95, 0.7, 0)));
+  const ahoge = new THREE.Group(); ahoge.position.set(0.15, 1.8, 0); head.add(ahoge);
+  [0, 1, 2].forEach(i => ahoge.add(box(0.2, 0.2, 0.2, hairM, i * 0.05, 0.1 + i * 0.2, 0)));
+
+  function makeArm(x) {
+    const root = new THREE.Group(); root.position.set(x, 1.7, 0);
+    const low = new THREE.Group(); low.position.y = -0.8;
+    root.add(box(0.6, 0.8, 0.6, shirt, 0, -0.4, 0), low); low.add(box(0.6, 0.8, 0.6, skin, 0, -0.4, 0));
+    upper.add(root); return { root, low };
+  }
+  function makeLeg(x) {
+    const root = new THREE.Group(); root.position.set(x, 1.6, 0);
+    const low = new THREE.Group(); low.position.y = -0.8;
+    root.add(box(0.8, 0.8, 0.8, pants, 0, -0.4, 0), low); low.add(box(0.8, 0.8, 0.8, pants, 0, -0.4, 0), box(0.9, 0.35, 1.1, shoe, 0, -0.625, 0.1));
+    hero.add(root); return { root, low };
+  }
+  const armL = makeArm(-1.25), armR = makeArm(1.25), legL = makeLeg(-0.45), legR = makeLeg(0.45);
+  const spin = new THREE.Group(); spin.add(hero); scene.add(spin);
+
+  // Lantai dihapus agar Pixel tampil tanpa background.
+
+  // Ikon kecil yang melayang (hati, tanda tanya, bintang, air mata, dll.)
+  const PATTERN = {
+    heart:['.##.##.','#######','#######','.#####.','..###..','...#...'], q:['.###.','#...#','....#','..##.','..#..','.....','..#..'],
+    ex:['.#.','.#.','.#.','.#.','...','.#.'], drop:['.#.','###','###','.#.'], star:['..#..','..#..','#####','..#..','..#..'], dots:['#.#.#']
+  };
+  const ICONS = { berpikir:['dots','#fff1e8',1], senang:['star','#ffec27',1], sedih:['drop','#29adff',-1], marah:['ex','#ff004d',1], kaget:['ex','#ffec27',1], bingung:['q','#ffec27',1], malu:['heart','#ff77a8',1], cinta:['heart','#ff004d',1] };
+  const iconTex = {}, parts = [];
+  function spawnIcon(name) {
+    const d = ICONS[name]; if (!d) return;
+    const pat = PATTERN[d[0]], key = d[0] + d[1];
+    const map = iconTex[key] || (iconTex[key] = tex(pat[0].length, pat.length, g => {
+      g.fillStyle = d[1]; pat.forEach((r, y) => [...r].forEach((c, x) => { if (c === '#') g.fillRect(x, y, 1, 1); }));
+    }));
+    const m = new THREE.SpriteMaterial({ map, transparent:true, depthTest:false });
+    const s = new THREE.Sprite(m); s.scale.set(pat[0].length * 0.17, pat.length * 0.17, 1);
+    const down = d[2] < 0, side = Math.random() < 0.5 ? -1 : 1;
+    s.position.set(down ? side * 0.45 : (Math.random() - 0.5) * 2.4, down ? 4.6 : 5.8 + Math.random() * 0.4, down ? 1 : 0.6);
+    scene.add(s); parts.push({ s, m, age:0, life: down ? 0.9 : 1.6, vy: down ? -2.2 : 1.1 });
+  }
+
+  // ---------- Input ----------
+  let userYaw = 0, drag = false, lastX = 0, px = 0.6, py = 0;
+  const cv = renderer.domElement;
+  cv.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointerup', () => drag = false);
+  addEventListener('pointermove', e => {
+    px = (e.clientX / innerWidth) * 2 - 1; py = (e.clientY / innerHeight) * 2 - 1;
+    if (drag) { userYaw += (e.clientX - lastX) * 0.01; lastX = e.clientX; }
+  });
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
+    const P = PIKSEL_MANUAL || Math.max(2, Math.round(h / 380));
+    renderer.setSize(Math.floor(w / P), Math.floor(h / P), false);
+    camera.aspect = w / h; camera.position.z = w / h < 0.8 ? 22 : 15; camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage); resize();
+
+  // ---------- Pose per perasaan ----------
+  const KEYS = ['outL','outR','swL','swR','elL','elR','waveR','lgL','lgR','knL','knR','dip','twist','leanZ','leanX','tilt','headX','lift'];
+  const pose = {}; KEYS.forEach(k => pose[k] = 0);
+  let emo = 'netral', t0 = 0, talking = false, iconT = 0;
+
+  function target(t, s) {
+    const T = {}; KEYS.forEach(k => T[k] = 0);
+    T.outL = T.outR = 0.1; T.elL = T.elR = 0.15;
+    const br = Math.sin(t * 2); T.dip = (br * 0.5 + 0.5) * 0.03;
+    const A = (o) => Object.assign(T, o);
+    if (emo === 'netral') T.tilt = Math.sin(t * 0.8) * 0.05;
+    if (emo === 'berpikir') A({ swR:1.3, elR:2.1, outR:0.15, tilt:0.15, headX:-0.12 });
+    if (emo === 'senang') { const b = Math.abs(Math.sin(t * 5)); A({ lift:b * 0.35, outL:1 + Math.sin(t * 10) * 0.4, outR:1 + Math.sin(t * 10 + 1) * 0.4, elL:0.3, elR:0.3, dip:(1 - b) * 0.05, tilt:Math.sin(t * 5) * 0.08 }); }
+    if (emo === 'sedih') A({ leanX:0.18, headX:0.4, tilt:0.12, outL:0.03, outR:0.03, elL:0.1, elR:0.1, dip:0.05 + Math.abs(Math.sin(t * 3)) * 0.04 });
+    if (emo === 'marah') { const k = Math.sin(t * 6);
+      A({ outL:0.35, outR:0.35, elL:1.5, elR:1.5, swL:0.3, swR:0.3, twist:Math.sin(t * 28) * 0.05, leanX:0.1, headX:0.15,
+          lgL:Math.max(0, k) * 0.5, knL:Math.max(0, k) * 0.5, lgR:Math.max(0, -k) * 0.5, knR:Math.max(0, -k) * 0.5, dip:Math.abs(k) * 0.05 }); }
+    if (emo === 'kaget') { const u = Math.min(s / 0.45, 1); A({ lift:4 * u * (1 - u) * 0.9, outL:1.3, outR:1.3, elL:0.4, elR:0.4, leanX:-0.12, headX:-0.15, twist:Math.sin(t * 30) * 0.02 }); }
+    if (emo === 'bingung') A({ tilt:0.3 + Math.sin(t * 2) * 0.08, outR:2.5, elR:0, waveR:Math.sin(t * 6) * 0.2, outL:0.2, twist:Math.sin(t * 1.5) * 0.1 });
+    if (emo === 'malu') A({ swL:1.5, swR:1.5, elL:1.5, elR:1.5, outL:-0.8, outR:-0.8, leanX:0.1, headX:0.2, tilt:0.1, twist:Math.sin(t * 2) * 0.15, dip:0.04 });
+    if (emo === 'cinta') A({ leanZ:Math.sin(t * 2) * 0.1, tilt:Math.sin(t * 2) * 0.15, swL:0.7, swR:0.7, elL:1.7, elR:1.7, outL:-0.1, outR:-0.1, dip:Math.abs(Math.sin(t * 2)) * 0.04, twist:Math.sin(t * 2) * 0.15 });
+    return T;
+  }
+  function setEmo(name) {
+    emo = name; t0 = clock.elapsedTime; iconT = 0;
+    document.getElementById('mood').textContent = 'perasaan: ' + name;
+  }
+
+  const clock = new THREE.Clock();
+  let lastFace = null;
+  function loop() {
+    requestAnimationFrame(loop);
+    const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime, s = t - t0;
+    const T = target(t, s);
+    KEYS.forEach(k => pose[k] = damp(pose[k], T[k], k === 'lift' ? 30 : KEHALUSAN, dt));
+    const p = pose;
+
+    armL.root.rotation.set(-p.swL, 0, -p.outL); armR.root.rotation.set(-p.swR, 0, p.outR);
+    armL.low.rotation.set(-p.elL, 0, 0);        armR.low.rotation.set(-p.elR, 0, p.waveR);
+    legL.root.rotation.x = -p.lgL; legR.root.rotation.x = -p.lgR;
+    legL.low.rotation.x = p.knL;   legR.low.rotation.x = p.knR;
+    upper.position.y = 1.6 - p.dip; upper.rotation.set(p.leanX, p.twist, p.leanZ);
+    hero.position.y = p.lift;
+
+    head.rotation.y = damp(head.rotation.y, px * 0.5 - p.twist * 0.5, 10, dt);
+    head.rotation.x = damp(head.rotation.x, py * 0.2 + p.headX - p.leanX, 10, dt);
+    head.rotation.z = p.tilt;
+    ahoge.rotation.z = Math.sin(t * 3) * 0.15 + p.leanZ * 2;
+
+    // Wajah: kedip, mulut bergerak saat bicara
+    const [e0, m0, x0] = EMO[emo];
+    const blink = (t % 3.2) < 0.13 && (e0 === 'open' || e0 === 'up' || e0 === 'conf' || e0 === 'sad');
+    const mouth = talking && Math.floor(t * 11) % 2 ? 'open' : m0;
+    const f = face(blink ? 'closed' : e0, mouth, x0);
+    if (f !== lastFace) { headMesh.material[4] = f; lastFace = f; }
+
+    // Ikon melayang
+    iconT -= dt;
+    if (iconT <= 0 && ICONS[emo]) { spawnIcon(emo); iconT = emo === 'sedih' ? 0.55 : 0.6; }
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const q = parts[i]; q.age += dt; q.s.position.y += q.vy * dt;
+      q.m.opacity = Math.max(0, 1 - Math.pow(q.age / q.life, 2));
+      if (q.age > q.life) { scene.remove(q.s); q.m.dispose(); parts.splice(i, 1); }
+    }
+
+    if (!drag) userYaw = damp(userYaw, Math.round(userYaw / TAU) * TAU, 3, dt);
+    spin.rotation.y = userYaw;
+    camera.position.x = damp(camera.position.x, px * 1.2, 3, dt);
+    camera.position.y = damp(camera.position.y, 4.6 - py * 0.5, 3, dt);
+    camera.lookAt(0, 2.9, 0);
+    renderer.render(scene, camera);
+  }
+  loop();
+
+  // ================= CHAT =================
+  const log = document.getElementById('log'), form = document.getElementById('f'), input = document.getElementById('q'), go = document.getElementById('go');
+  let busy = false, calm = 0;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  function bubble(cls, text) {
+    const d = document.createElement('div'); d.className = 'b ' + cls; d.textContent = text;
+    log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
+  }
+  function type(el, str) {
+    return new Promise(res => {
+      let i = 0; talking = true;
+      const id = setInterval(() => {
+        el.textContent = str.slice(0, ++i); log.scrollTop = log.scrollHeight;
+        if (i >= str.length) { clearInterval(id); talking = false; res(); }
+      }, 32);
+    });
+  }
+  async function kirim(teks) {
+    teks = teks.trim(); if (!teks || busy) return;
+    busy = true; go.disabled = true; clearTimeout(calm);
+    bubble('u', teks); input.value = '';
+    setEmo('berpikir');
+    const el = bubble('p', '...');
+    let r; try { r = await jawab(teks); }
+    catch (e) { r = { emosi:'sedih', teks:'Maaf, aku lagi error. Coba lagi nanti ya.' }; }
+    setEmo(EMO[r.emosi] ? r.emosi : 'netral');
+    await type(el, r.teks);
+    busy = false; go.disabled = false; input.focus();
+    calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 7000);
+  }
+  form.addEventListener('submit', e => { e.preventDefault(); kirim(input.value); });
+  CHIPS.forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = c;
+    b.addEventListener('click', () => kirim(c)); document.getElementById('chips').appendChild(b);
+  });
+
+  // Sapaan pembuka
+  setEmo('senang');
+  type(bubble('p', ''), 'Halo! Aku Pixel. Ajak aku ngobrol, wajah dan badanku bakal ikut merasakan!')
+    .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
+})();
+</script>
+</body>
+</html>
