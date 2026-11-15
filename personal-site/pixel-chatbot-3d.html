@@ -8,9 +8,11 @@
 <style>
   :root { --bg:#1d2b53; --ink:#fff1e8; --blue:#29adff; --yel:#ffec27; --dark:#0b1230; }
   * { box-sizing:border-box; }
-  html, body { margin:0; height:100%; background:transparent !important; color:var(--ink); font-family:'VT323', ui-monospace, Menlo, Consolas, monospace; }
-  #app { display:grid; grid-template-columns:minmax(0,1fr) 400px; height:100%; background:transparent !important; }
-  #stage { position:relative; min-height:0; background:transparent !important; }
+  html, body { margin:0; height:100%; background:transparent; color:var(--ink); font-family:'VT323', ui-monospace, Menlo, Consolas, monospace; }
+  #app { display:grid; grid-template-columns:1fr 400px; height:100%; }
+  body.pxb-avatar #app{display:block} body.pxb-avatar #chat{display:none} body.pxb-avatar #stage{width:100%;height:100%;}
+  body.pxb-chat #app{display:block} body.pxb-chat #stage{display:none} body.pxb-chat #chat{height:100%;border:0;}
+  #stage { position:relative; min-height:0; }
   canvas { width:100%; height:100%; display:block; image-rendering:pixelated; touch-action:none; cursor:grab; }
   #chat { display:flex; flex-direction:column; min-height:0; background:var(--dark); border-left:4px solid var(--blue); }
   header { padding:14px 16px; display:flex; justify-content:space-between; align-items:center; gap:8px; border-bottom:4px solid var(--bg); }
@@ -29,30 +31,7 @@
   form button:active { transform:translateY(3px); box-shadow:0 1px 0 #ab5236; }
   form button:disabled { opacity:.5; cursor:wait; }
   button:focus-visible, input:focus-visible { outline:3px solid var(--yel); outline-offset:2px; }
-
-  @media (max-width:760px) {
-    html, body { width:100%; height:100%; overflow:hidden; }
-    #app { width:100%; height:640px; min-height:640px; display:flex; flex-direction:column; overflow:hidden; }
-    #stage { width:100%; height:260px; min-height:260px; flex:0 0 260px; overflow:hidden; }
-    #chat { width:100%; height:380px; min-height:380px; flex:0 0 380px; overflow:hidden; border:0; border-top:3px solid var(--blue); }
-    header { flex:0 0 34px; height:34px; padding:5px 9px; border-bottom:2px solid var(--bg); }
-    header b { font-size:8px; }
-    #mood { font-size:13px; }
-    #log { min-height:0; padding:6px 8px; gap:4px; overflow:hidden; }
-    .b { max-width:94%; padding:4px 6px; font-size:16px; line-height:1.05; box-shadow:2px 2px 0 rgba(0,0,0,.4); }
-    #chips { flex:0 0 52px; height:52px; max-height:52px; overflow:hidden; gap:3px; padding:0 7px 4px; align-content:flex-start; }
-    #chips button { font-size:12px; padding:2px 5px; border-width:1px; }
-    form { flex:0 0 43px; height:43px; gap:5px; padding:5px 7px 6px; border-top:2px solid var(--bg); }
-    input { font-size:16px; padding:5px 6px; border-width:2px; }
-    form button { font-size:8px; padding:0 8px; box-shadow:0 2px 0 #ab5236; }
-  }
-  @media (max-width:380px) {
-    #app { height:600px; min-height:600px; }
-    #stage { height:235px; min-height:235px; flex-basis:235px; }
-    #chat { height:365px; min-height:365px; flex-basis:365px; }
-    .b { font-size:14px; }
-    #chips button { font-size:11px; }
-  }
+  @media (max-width:760px) { #app { grid-template-columns:1fr; grid-template-rows:42% 58%; } #chat { border-left:0; border-top:4px solid var(--blue); } }
 </style>
 </head>
 <body>
@@ -72,6 +51,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
+  const mode = new URLSearchParams(location.search).get('mode');
+  if (mode === 'avatar') document.body.classList.add('pxb-avatar');
+  if (mode === 'chat') document.body.classList.add('pxb-chat');
   // ================= PENGATURAN =================
   const WARNA = { kulit:0xffccaa, rambut:0x5f574f, baju:0x29adff, celana:0x7e2553, sepatu:0x1d2b53, lantai1:0x008751, lantai2:0x00a85a };
   const PIKSEL_MANUAL = 0;  // 0 = otomatis; 1 = sangat halus; 4 = kotak besar
@@ -94,25 +76,30 @@
     [/imut|lucu|keren|hebat|pintar|baik banget|mantap|bagus/i, 'malu',
       ['Ih... jangan muji terus, aku jadi malu.', 'A-apa sih... makasih ya. Pipiku jadi merah.']],
     [/siapa (kamu|namamu)|nama ?(mu|kamu)|kamu siapa/i, 'senang',
-      ['Aku asisten AI Rafli yang tinggal di website ini!']],
+      ['Aku Asisten Rafli, asisten 8-bit 3D yang siap membantu menjelaskan portfolio Rafli!']],
     [/apa kabar|gimana kabar|bisa apa/i, 'senang',
       ['Aku baik banget! Aku bisa ngobrol, dan wajah serta badanku ikut merasakan ceritamu.']],
     [/halo|hai\b|hi\b|hei|hey|pagi|siang|sore|malam|assalam|terima kasih|makasih|thanks|haha|wkwk|hehe|lol|senang|bahagia|yey|asik|menang|lulus/i, 'senang',
       ['Halo! Senang banget ketemu kamu!', 'Yey! Hari ini jadi seru deh!', 'Hehe, aku senang kamu mampir!']]
   ];
-  async function jawab(teks) {
-    const history = [...document.querySelectorAll('#log .b')].slice(-11).map(el => ({
-      role: el.classList.contains('u') ? 'user' : 'assistant', content: el.textContent
-    }));
-    const r = await fetch('/api/chat', {
-      method: 'POST', headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ messages: [...history, { role: 'user', content: teks }] })
-    });
-    const data = await r.json();
-    if (!r.ok) throw new Error(data.error || 'AI gagal');
-    return { emosi: 'senang', teks: data.reply || 'Maaf, aku belum mendapat jawaban.' };
+  const riwayat = [];
+  function deteksiEmosi(teks) {
+    for (const [re, emosi] of ATURAN) if (re.test(teks)) return emosi;
+    return 'netral';
   }
-  const CHIPS = ['Halo!', 'Siapa Rafli?', 'Apa keahlian Rafli?', 'Ceritakan proyek Rafli', 'Rafli kuliah di mana?', 'Bagaimana menghubungi Rafli?'];
+  async function jawab(teks) {
+    riwayat.push({ role:'user', content:teks });
+    const response = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({ messages:riwayat.slice(-12) })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.reply) throw new Error(data.error || 'API chat gagal');
+    riwayat.push({ role:'assistant', content:data.reply });
+    return { emosi:deteksiEmosi(teks), teks:data.reply };
+  }
+  const CHIPS = ['Siapa Rafli?', 'Apa keahlian Rafli?', 'Ceritakan proyek Rafli', 'Apa itu LaporFasilitas?', 'Bot Account Detection?', 'n8n Workflow Alert?', 'Detektor Pesan Penipuan?', 'Kontak Rafli?'];
 
   // ================= 3D =================
   const TAU = Math.PI * 2;
@@ -120,8 +107,8 @@
   const hex = n => '#' + n.toString(16).padStart(6, '0');
 
   const stage = document.getElementById('stage');
-  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  renderer.setPixelRatio(1); renderer.setClearColor(0x000000, 0);
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true }); renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(1);
   renderer.shadowMap.enabled = true;
   stage.appendChild(renderer.domElement);
 
@@ -218,7 +205,10 @@
   const armL = makeArm(-1.25), armR = makeArm(1.25), legL = makeLeg(-0.45), legR = makeLeg(0.45);
   const spin = new THREE.Group(); spin.add(hero); scene.add(spin);
 
-  // Lantai dihapus agar Pixel tampil tanpa background.
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(1.7, 16), new THREE.MeshBasicMaterial({ color:0x1d2b53, transparent:true, opacity:.45 }));
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.y = -0.5;
+  scene.add(shadow);
 
   // Ikon kecil yang melayang (hati, tanda tanya, bintang, air mata, dll.)
   const PATTERN = {
@@ -281,9 +271,14 @@
     return T;
   }
   function setEmo(name) {
+    name = EMO[name] ? name : 'netral';
     emo = name; t0 = clock.elapsedTime; iconT = 0;
-    document.getElementById('mood').textContent = 'perasaan: ' + name;
+    const mood = document.getElementById('mood');
+    if (mood) mood.textContent = 'perasaan: ' + name;
   }
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'pixel-emotion') setEmo(e.data.emotion);
+  });
 
   const clock = new THREE.Clock();
   let lastFace = null;
@@ -354,9 +349,10 @@
     bubble('u', teks); input.value = '';
     setEmo('berpikir');
     const el = bubble('p', '...');
-    let r; try { r = await jawab(teks); }
+    let r; try { [r] = await Promise.all([jawab(teks), sleep(900)]); }
     catch (e) { r = { emosi:'sedih', teks:'Maaf, aku lagi error. Coba lagi nanti ya.' }; }
     setEmo(EMO[r.emosi] ? r.emosi : 'netral');
+    window.parent.postMessage({ type:'pixel-emotion', emotion:EMO[r.emosi] ? r.emosi : 'netral' }, '*');
     await type(el, r.teks);
     busy = false; go.disabled = false; input.focus();
     calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 7000);
@@ -369,9 +365,26 @@
 
   // Sapaan pembuka
   setEmo('senang');
-  type(bubble('p', ''), 'Halo! Aku asisten AI milik Muhamad Rafli Pratama. Ajak aku ngobrol tentang website dan karya Rafli!')
+  type(bubble('p', ''), 'Halo! Aku Asisten Rafli. Ajak aku ngobrol, wajah dan badanku bakal ikut merasakan!')
     .then(() => { calm = setTimeout(() => { if (!busy) setEmo('netral'); }, 5000); });
 })();
 </script>
 </body>
 </html>
+
+<!-- MULAI: PIXEL CHAT COMPACT LAYOUT -->
+<style>
+html,body,#app{width:100%;height:100%;min-width:0;overflow:hidden}#chat{width:100%;min-width:0;overflow:hidden}header{flex-wrap:nowrap;white-space:nowrap;padding:2cqw 3cqw;font-size:max(11px,3cqw)}#mood{font-size:max(11px,3cqw);min-width:0;overflow:visible}#log{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#29adff #0b1230;font-size:max(12px,4cqw)}#log::-webkit-scrollbar{width:6px}#log::-webkit-scrollbar-thumb{background:#29adff}#log::-webkit-scrollbar-track{background:#0b1230}#log::-webkit-scrollbar-button{display:none}#chips{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap;padding:0 3cqw 2cqw}#chips::-webkit-scrollbar{display:none}#chips button{flex:0 0 auto;font-size:max(12px,3.2cqw)}form{flex:none;min-height:0;padding:2cqw 3cqw}input{min-width:60%;font-size:max(12px,3.5cqw)}form button{flex:0 0 auto;font-size:max(11px,2.3cqw);padding:0 3cqw}.b{font-size:max(12px,4cqw)}button:focus-visible,input:focus-visible{outline:3px solid #ffec27;outline-offset:2px}</style>
+<!-- SELESAI: PIXEL CHAT COMPACT LAYOUT -->
+
+<!-- MULAI: CHAT READABLE LAYOUT -->
+<style>
+html,body,#app{width:100%;height:100%;min-width:0;overflow:hidden}#chat{min-width:0;overflow:hidden}header{flex-wrap:nowrap;white-space:nowrap}#log{min-height:0;overflow-y:auto;font-size:max(12px,3.8cqw)}#chips{flex-wrap:wrap;max-height:84px;overflow-y:auto}#chips button{font-size:max(12px,3cqw)}.b{font-size:max(12px,3.8cqw)}form{flex:none}input{font-size:max(12px,3.8cqw)}
+</style>
+<!-- SELESAI: CHAT READABLE LAYOUT -->
+
+<!-- MULAI: CHAT READABLE SAFE -->
+<style>
+#chat{min-width:0;overflow:hidden}header{flex-wrap:nowrap;white-space:nowrap;padding:12px}#mood{font-size:max(12px,2.8cqw);white-space:nowrap}#log{min-height:0;overflow-y:auto}.b{font-size:max(12px,3.8cqw);word-break:break-word}#chips{display:flex;flex-wrap:wrap;gap:8px;max-height:88px;overflow-y:auto}#chips button{font-size:max(12px,3cqw);white-space:nowrap}form{flex:none}input{font-size:max(12px,3.8cqw)}
+</style>
+<!-- SELESAI: CHAT READABLE SAFE -->
