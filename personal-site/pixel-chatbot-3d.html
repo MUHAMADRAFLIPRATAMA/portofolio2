@@ -347,7 +347,8 @@
     teks = teks.trim(); if (!teks || busy) return;
     busy = true; go.disabled = true; clearTimeout(calm);
     bubble('u', teks); input.value = '';
-    setEmo('berpikir');
+    setEmo('senang');
+    window.parent.postMessage({ type:'pixel-emotion', emotion:'senang' }, '*');
     const el = bubble('p', '...');
     let r; try { [r] = await Promise.all([jawab(teks), sleep(900)]); }
     catch (e) { r = { emosi:'sedih', teks:'Maaf, aku lagi error. Coba lagi nanti ya.' }; }
