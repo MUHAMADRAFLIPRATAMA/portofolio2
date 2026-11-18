@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "contrib": "pacman-contribution-graph --game pacman --username MUHAMADRAFLIPRATAMA --platform github --gameTheme github-dark --output assets/pacman/pacman-dark.svg",
+    "contrib:light": "pacman-contribution-graph --game pacman --username MUHAMADRAFLIPRATAMA --platform github --gameTheme github --output assets/pacman/pacman-light.svg"
   },
   "keywords": [],
   "author": "",
